@@ -16,7 +16,7 @@ namespace timetableProject.Controllers
         {
             List<Class> result=_class.GetList();
             if (result == null) {return Unauthorized();}
-            return result;
+            return Ok(result);
         }
 
         // GET api/<ClassController>/5
@@ -25,28 +25,33 @@ namespace timetableProject.Controllers
         {
             Class result = _class.GetClassId(id);
             if (result == null) { return Unauthorized(); }
-            return result;
+            return Ok(result);
         }
 
         // POST api/<ClassController>
         [HttpPost]
         public ActionResult<bool> Post([FromBody] Class value)
         {
-            return _class.AddItem(value);
+            bool flag= _class.AddItem(value);
+            return flag == true ? Ok(true) : NotFound(false);
+
         }
 
         // PUT api/<ClassController>/5
         [HttpPut("{id}")]
         public ActionResult<bool> Put(int id, [FromBody] Class value)
         {
-            return _class.Update(id, value);
+            bool flag = _class.Update(id, value);
+            return flag == true ? Ok(true) : NotFound(false);
+
         }
 
         // DELETE api/<ClassController>/5
         [HttpDelete("{id}")]
         public ActionResult<bool> Delete(int id)
         {
-            return _class.RemoveItem(id);
+            bool flag= _class.RemoveItem(id);
+            return flag == true ? Ok(true) : NotFound(false);
         }
     }
 }
