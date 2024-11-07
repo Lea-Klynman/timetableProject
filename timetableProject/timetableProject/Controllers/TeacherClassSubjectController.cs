@@ -14,42 +14,44 @@ namespace timetableProject.Controllers
         [HttpGet]
         public ActionResult<List<TeacherClassSubject>> Get()
         {
-            List<TeacherClassSubject>result=_teacherClassSubject.GetList();
-            if (result == null) {return Unauthorized();}
-            return Ok(result);
+            return _teacherClassSubject.GetList();
         }
 
         // GET api/<TeacherClassSubjectController>/5
         [HttpGet("{id}")]
         public ActionResult<TeacherClassSubject> Get(int id)
         {
+            if (id < 0) return BadRequest();
             TeacherClassSubject  result = _teacherClassSubject.GetTeacherClassSubjectId(id);
-            if (result == null) { return Unauthorized(); }
-            return Ok(result);
+            if (result == null) { return NotFound(); }
+            return result;
         }
 
         // POST api/<TeacherClassSubjectController>
         [HttpPost]
         public ActionResult<bool> Post([FromBody] TeacherClassSubject value)
-        {
-            bool flag= _teacherClassSubject.AddItem(value);
-            return flag == true ? Ok(true) : NotFound(false);
+        { if(value == null||value.ClassId<0||value.TeacherId<0||value.SubjectId<0)
+                return BadRequest();
+            return _teacherClassSubject.AddItem(value);
         }
 
         // PUT api/<TeacherClassSubjectController>/5
         [HttpPut("{id}")]
         public ActionResult<bool> Put(int id, [FromBody] TeacherClassSubject value)
         {
-            bool flag= _teacherClassSubject.Update(id, value);
-            return flag == true ? Ok(true) : NotFound(false);
+            if (id < 0 || value == null || value.ClassId < 0 || value.TeacherId < 0 || value.SubjectId < 0)
+                return BadRequest();
+            bool flag = _teacherClassSubject.Update(id, value);
+            return flag == true ? true : NotFound(false);
         }
 
         // DELETE api/<TeacherClassSubjectController>/5
         [HttpDelete("{id}")]
         public ActionResult<bool> Delete(int id)
         {
+            if(id < 0) { return BadRequest(); }
             bool flag= _teacherClassSubject.RemoveItem(id);
-            return flag == true ? Ok(true) : NotFound(false);
+            return flag == true ? true : NotFound(false);
         }
     }
 }

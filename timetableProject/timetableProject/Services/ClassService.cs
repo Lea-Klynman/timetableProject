@@ -4,16 +4,23 @@ namespace timetableProject.Services
 {
     public class ClassService
     {
-        public List<Class> Classes { get; set; }= new List<Class>();
-        public List<Class> GetList() => Classes;
+        public List<Class> GetList()
+        {
+            if(MangerDataContex._dataContex._Classes==null)
+                MangerDataContex._dataContex._Classes= new List<Class>();
+           return MangerDataContex._dataContex._Classes;
+        }
         public Class GetClassId(int id)
         {
-            Class c = Classes.FirstOrDefault(cl => cl.ClassId == id);
-            return c;
+            if (MangerDataContex._dataContex._Classes == null)
+                MangerDataContex._dataContex._Classes = new List<Class>();
+            return MangerDataContex._dataContex._Classes.FirstOrDefault(cl => cl.ClassId == id);
         }
         public bool Update(int id,Class cl)
         {
-            Class c=Classes.FirstOrDefault(cl=>cl.ClassId==id);
+            if (MangerDataContex._dataContex._Classes == null)
+                MangerDataContex._dataContex._Classes = new List<Class>();
+            Class c= MangerDataContex._dataContex._Classes.FirstOrDefault(cl=>cl.ClassId==id);
             if(c==null) return false;
             c.ClassId = id;
             c.ClassNumber=cl.ClassNumber;
@@ -22,18 +29,23 @@ namespace timetableProject.Services
             return true;
         }
         public bool RemoveItem(int id) {
-            Class cl = Classes.FirstOrDefault(c => c.ClassId== id);
+            if (MangerDataContex._dataContex._Classes == null)
+                MangerDataContex._dataContex._Classes = new List<Class>();
+            Class cl = MangerDataContex._dataContex._Classes.FirstOrDefault(c => c.ClassId== id);
             if (cl == null)
             {
                 return false;
             }
-            Classes.Remove(cl);
+            MangerDataContex._dataContex._Classes.Remove(cl);
             return true;
         }
-        public bool AddItem(Class cl) { 
-        if (cl == null) return false;
+        public bool AddItem(Class cl) {
+            if (MangerDataContex._dataContex._Classes == null)
+                MangerDataContex._dataContex._Classes = new List<Class>();
+            if (cl == null) return false;
             cl.TotalWeekHours = cl.Subjects.Sum(su => su.HoursPersWeek);
-            Classes.Add(cl);
+            cl.ClassId = MangerDataContex._dataContex._Classes.Max(c => c.ClassId) + 1;
+            MangerDataContex._dataContex._Classes.Add(cl);
             return true;
         }
 

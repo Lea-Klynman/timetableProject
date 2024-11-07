@@ -4,15 +4,21 @@ namespace timetableProject.Services
 {
     public class AvailabilityService
     {
-        public List<Availability> Availabilities { get; set; }=new List<Availability>();
-        public List<Availability> GetList() { return Availabilities; }
+        public List<Availability> GetList() { 
+            if(MangerDataContex._dataContex._Availabilities==null)
+                MangerDataContex._dataContex._Availabilities=new List<Availability>();
+            return MangerDataContex._dataContex._Availabilities; }
         public Availability GetAvailabilityId(int id) {
-            Availability av = Availabilities.FirstOrDefault(a => a.AvailabilityId == id);
+            if (MangerDataContex._dataContex._Availabilities == null)
+                MangerDataContex._dataContex._Availabilities = new List<Availability>();
+            Availability av = MangerDataContex._dataContex._Availabilities.FirstOrDefault(a => a.AvailabilityId == id);
         return av ;
         }
         public bool Update(int id, Availability avail)
         {
-            Availability av = Availabilities.FirstOrDefault(a => a.AvailabilityId == id);
+            if (MangerDataContex._dataContex._Availabilities == null)
+                MangerDataContex._dataContex._Availabilities = new List<Availability>();
+            Availability av = MangerDataContex._dataContex._Availabilities.FirstOrDefault(a => a.AvailabilityId == id);
             if (av == null) return false;
             av.AvailabilityId = id;
             av.isMust=avail.isMust;
@@ -23,18 +29,23 @@ namespace timetableProject.Services
         }
         public bool RemoveItem(int id)
         {
-            Availability av = Availabilities.FirstOrDefault(a=> a.AvailabilityId == id);
+            if (MangerDataContex._dataContex._Availabilities == null)
+                MangerDataContex._dataContex._Availabilities = new List<Availability>();
+            Availability av = MangerDataContex._dataContex._Availabilities.FirstOrDefault(a=> a.AvailabilityId == id);
             if( av == null)
             {
                 return false;
             }
-            Availabilities.Remove(av);
+            MangerDataContex._dataContex._Availabilities.Remove(av);
             return true;
         }
         public bool AddItem(Availability av)
         {
+            if (MangerDataContex._dataContex._Availabilities == null)
+                MangerDataContex._dataContex._Availabilities = new List<Availability>();
             if (av == null) return false;
-            Availabilities.Add(av);
+            av.AvailabilityId = MangerDataContex._dataContex._Availabilities.Max(t => t.AvailabilityId) + 1;
+            MangerDataContex._dataContex._Availabilities.Add(av);
             return true;
         }
     }

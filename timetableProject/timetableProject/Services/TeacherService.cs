@@ -4,16 +4,21 @@ namespace timetableProject.Services
 {
     public class TeacherService
     {
-        public List<Teacher> Teachers { get; set; } = new List<Teacher>();
-        public List<Teacher> GetList() => Teachers;
+        public List<Teacher> GetList() {
+        if(MangerDataContex._dataContex._Teachers == null) 
+                MangerDataContex._dataContex._Teachers = new List<Teacher>();
+            return MangerDataContex._dataContex._Teachers;
+        }
         public Teacher GetTeacherId(int id)
         {
-            Teacher teacher = Teachers.FirstOrDefault(t => t.TeacherId == id);
+            Teacher teacher = MangerDataContex._dataContex._Teachers.FirstOrDefault(t => t.TeacherId == id);
             return teacher;
         }
         public bool Update(int id, Teacher updatedTeacher)
         {
-            Teacher teacher = Teachers.FirstOrDefault(t => t.TeacherId == id);
+            if (MangerDataContex._dataContex._Teachers == null)
+                MangerDataContex._dataContex._Teachers = new List<Teacher>();
+            Teacher teacher = MangerDataContex._dataContex._Teachers.FirstOrDefault(t => t.TeacherId == id);
             if (teacher == null)
             {
                 return false;
@@ -28,19 +33,24 @@ namespace timetableProject.Services
         }
         public bool RemoveItem(int id)
         {
-            Teacher teacher = Teachers.FirstOrDefault(t => t.TeacherId == id);
+            if (MangerDataContex._dataContex._Teachers == null)
+                MangerDataContex._dataContex._Teachers = new List<Teacher>();
+            Teacher teacher = MangerDataContex._dataContex._Teachers.FirstOrDefault(t => t.TeacherId == id);
             if (teacher == null)
             {
                 return false;
             }
-            Teachers.Remove(teacher);
+            MangerDataContex._dataContex._Teachers.Remove(teacher);
             return true;
 
         }
         public bool AddItem(Teacher teacher)
         {
+            if (MangerDataContex._dataContex._Teachers == null)
+                MangerDataContex._dataContex._Teachers = new List<Teacher>();
             teacher.TotalWeeklyHours = teacher.Subjects.Sum(cs => cs.HoursPerWeek);
-            Teachers.Add(teacher);
+            teacher.TeacherId = MangerDataContex._dataContex._Teachers.Max(t => t.TeacherId) + 1;
+            MangerDataContex._dataContex._Teachers.Add(teacher);
             return true;
         }
     }

@@ -14,42 +14,45 @@ namespace timetableProject.Controllers
         [HttpGet]
         public ActionResult<List<Teacher>> Get()
         {
-            List<Teacher> result=_teacher.GetList();
-            if (result == null)return Unauthorized();
-            return Ok(result);
+            return _teacher.GetList();
+            
         }
 
         // GET api/<TeacherController>/5
         [HttpGet("{id}")]
         public ActionResult<Teacher> Get(int id)
-        {
+        {   if (id< 0)
+                return BadRequest();
             Teacher result = _teacher.GetTeacherId(id);
-            if (result == null) return Unauthorized();
-            return Ok(result);
+            if (result == null) return NotFound();
+            return result;
         }
 
         // POST api/<TeacherController>
         [HttpPost]
         public ActionResult<bool> Post([FromBody] Teacher value)
         {
-            bool flag= _teacher.AddItem(value);
-            return flag == true ? Ok(true) : NotFound(false);
+            if(value==null||!Validation.IdString(value.Id))
+                return BadRequest();
+            return _teacher.AddItem(value);
         }
 
         // PUT api/<TeacherController>/5
         [HttpPut("{id}")]
         public ActionResult<bool> Put(int id, [FromBody] Teacher value)
         {
-            bool flag= _teacher.Update(id, value);
-            return flag == true ? Ok(true) : NotFound(false);
+            if (value == null ||id<0|| !Validation.IdString(value.Id))
+                return BadRequest();
+            return _teacher.Update(id, value);
         }
 
         // DELETE api/<TeacherController>/5
         [HttpDelete("{id}")]
         public ActionResult<bool> Delete(int id)
         {
-            bool flag= _teacher.RemoveItem(id);
-            return flag == true ? Ok(true) : NotFound(false);
+            if(id<0)
+                return BadRequest();
+            return _teacher.RemoveItem(id);
         }
     }
 }

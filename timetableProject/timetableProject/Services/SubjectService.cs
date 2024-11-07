@@ -2,16 +2,23 @@
 {
     public class SubjectService
     {
-        public List<Subject> Subjects { get; set; }
-        public List<Subject> GetList() => Subjects;
+        public List<Subject> GetList() {
+            if(MangerDataContex._dataContex._Subjects==null)
+                MangerDataContex._dataContex._Subjects=new List<Subject>();
+            return MangerDataContex._dataContex._Subjects;
+        }
         public Subject GetSubjectId(int id)
         {
-            Subject su = Subjects.FirstOrDefault(s => s.SubjectId == id);
+            if (MangerDataContex._dataContex._Subjects == null)
+                MangerDataContex._dataContex._Subjects = new List<Subject>();
+            Subject su = MangerDataContex._dataContex._Subjects.FirstOrDefault(s => s.SubjectId == id);
             return su;
         }
         public bool Update(int id, Subject cl)
         {
-            Subject su = Subjects.FirstOrDefault(s => s.SubjectId == id);
+            if (MangerDataContex._dataContex._Subjects == null)
+                MangerDataContex._dataContex._Subjects = new List<Subject>();
+            Subject su = MangerDataContex._dataContex._Subjects.FirstOrDefault(s => s.SubjectId == id);
             if (su == null) return false;
             su.SubjectId = id;
             su.Name = cl.Name;
@@ -20,18 +27,23 @@
         }
         public bool RemoveItem(int id)
         {
-            Subject su = Subjects.FirstOrDefault(s => s.SubjectId == id);
+            if (MangerDataContex._dataContex._Subjects == null)
+                MangerDataContex._dataContex._Subjects = new List<Subject>();
+            Subject su = MangerDataContex._dataContex._Subjects.FirstOrDefault(s => s.SubjectId == id);
             if (su == null)
             {
                 return false;
             }
-            Subjects.Remove(su);
+            MangerDataContex._dataContex._Subjects.Remove(su);
             return true;
         }
         public bool AddItem(Subject su)
         {
+            if (MangerDataContex._dataContex._Subjects == null)
+                MangerDataContex._dataContex._Subjects = new List<Subject>();
             if (su == null) return false;
-            Subjects.Add(su);
+            su.SubjectId= MangerDataContex._dataContex._Subjects.Max(s => s.SubjectId)+1;
+            MangerDataContex._dataContex._Subjects.Add(su);
             return true;
         }
 
