@@ -1,4 +1,7 @@
-﻿namespace timetableProject.Services
+﻿using timetableProject.DATA;
+using timetableProject.DTO;
+
+namespace timetableProject.Services
 {
     public class SubjectService
     {

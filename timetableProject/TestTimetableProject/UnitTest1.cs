@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using timetableProject;
 using timetableProject.Controllers;
+using timetableProject.DTO;
+using timetableProject.Services;
 
 namespace TestTimetableProject
 {
@@ -10,39 +11,47 @@ namespace TestTimetableProject
         [Fact]
         public void TestlengthIdPost()
         {
-            string id = "215117";
+            string id = "215114778";
             Teacher t1 = new Teacher();
             t1.Id = id;
             t1.TotalWeeklyHours = 4;
-            var result = new TeacherController().Post(t1);
-            Assert.IsNotType<BadRequestResult>(result);
+            var controller= new TeacherController(new TeacherService(new TestContex()));
+            var result = controller.Post(t1);
+            Assert.IsType<bool>(result.Value);
         }
+        [Fact]
         public void TestValidPost()
         {
-            string id = "215114777";
+            string id = "215114778";
             Teacher t1 = new Teacher();
             t1.Id = id;
             t1.TotalWeeklyHours = 4;
-            var result = new TeacherController().Post(t1);
-            Assert.IsNotType<BadRequestResult>(result);
+            var controller = new TeacherController(new TeacherService(new TestContex()));
+            var result = controller.Post(t1);
+            Assert.IsType<bool>(result.Value);
         }
+        [Fact]
         public void TestlengthIdPut()
         {
-            string id = "215114777";
+            string id = "215114778";
             Teacher t1 = new Teacher();
             t1.Id = id;
+            t1.TeacherId = 3;
             t1.TotalWeeklyHours = 4;
-            var result = new TeacherController().Put(1,t1);
-            Assert.IsType<BadRequestResult>(result);
+            var controller = new TeacherController(new TeacherService(new TestContex()));
+            var result = controller.Put(3,t1);
+            Assert.IsType<bool>(result.Value);
         }
+        [Fact]
         public void TestValidPut()
         {
-            string id = "215114777";
+            string id = "215114778";
             Teacher t1 = new Teacher();
             t1.Id = id;
             t1.TotalWeeklyHours = 4;
-            var result = new TeacherController().Put(1,t1);
-            Assert.IsNotType<BadRequestResult>(result);
+            var controller = new TeacherController(new TeacherService(new TestContex()));
+            var result = controller.Put(3,t1);
+            Assert.IsType<bool>(result.Value);
         }
 
     }

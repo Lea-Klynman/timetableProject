@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using timetableProject.DTO;
 using timetableProject.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

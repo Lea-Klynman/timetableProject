@@ -1,6 +1,14 @@
+using timetableProject.DATA;
+using timetableProject.Interface;
+using timetableProject.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<ITeacherData, TeacherDataContex>();
+builder.Services.AddScoped<TeacherService>();
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

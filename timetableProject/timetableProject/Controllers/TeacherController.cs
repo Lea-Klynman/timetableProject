@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using timetableProject.DTO;
 using timetableProject.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,7 +10,11 @@ namespace timetableProject.Controllers
     [ApiController]
     public class TeacherController : ControllerBase
     {
-        readonly TeacherService _teacher= new TeacherService();
+        readonly TeacherService _teacher;
+        public TeacherController(TeacherService teacher)
+        {
+            _teacher = teacher;
+        }
         // GET: api/<TeacherController>
         [HttpGet]
         public ActionResult<List<Teacher>> Get()

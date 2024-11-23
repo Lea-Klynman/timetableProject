@@ -1,57 +1,72 @@
 ﻿using timetableProject.Controllers;
+using timetableProject.DATA;
+using timetableProject.DTO;
+using timetableProject.Interface;
 
 namespace timetableProject.Services
 {
     public class TeacherService
-    {
+    { readonly ITeacherData _dataTeacher;
+        public TeacherService(ITeacherData dataTeacher)
+        {
+            _dataTeacher = dataTeacher;
+        }
         public List<Teacher> GetList() {
-        if(MangerDataContex._dataContex._Teachers == null) 
-                MangerDataContex._dataContex._Teachers = new List<Teacher>();
-            return MangerDataContex._dataContex._Teachers;
+            var data = _dataTeacher.LoadData();
+            if (data == null)
+                return null;
+            return data;
         }
         public Teacher GetTeacherId(int id)
         {
-            Teacher teacher = MangerDataContex._dataContex._Teachers.FirstOrDefault(t => t.TeacherId == id);
-            return teacher;
+            var data = _dataTeacher.LoadData();
+            if (data == null)
+                return null;
+            return data.Where(t => t.TeacherId == id).FirstOrDefault();
         }
         public bool Update(int id, Teacher updatedTeacher)
         {
-            if (MangerDataContex._dataContex._Teachers == null)
-                MangerDataContex._dataContex._Teachers = new List<Teacher>();
-            Teacher teacher = MangerDataContex._dataContex._Teachers.FirstOrDefault(t => t.TeacherId == id);
+            var data = _dataTeacher.LoadData();
+            if (data == null)
+                return false;
+            Teacher teacher = data.Where(t => t.TeacherId == id).FirstOrDefault();
             if (teacher == null)
             {
                 return false;
             }
-            teacher.FirstName = updatedTeacher.FirstName;
-            teacher.LastName = updatedTeacher.LastName;
-            teacher.Subjects = updatedTeacher.Subjects;
-            teacher.Availabilities = updatedTeacher.Availabilities;
-            teacher.TotalWeeklyHours = updatedTeacher.Subjects.Sum(cs => cs.HoursPerWeek);
-            return true;
+            
+            teacher.FirstName = updatedTeacher.FirstName ?? teacher.FirstName;
+            teacher.LastName = updatedTeacher.LastName ?? teacher.LastName;
+            teacher.Subjects = updatedTeacher.Subjects ?? teacher.Subjects;
+            teacher.Availabilities = updatedTeacher.Availabilities ?? teacher.Availabilities;
+          teacher.TotalWeeklyHours = teacher.Subjects.Sum(cs => cs.HoursPerWeek);
+            return _dataTeacher.SaveData(data);
 
         }
         public bool RemoveItem(int id)
         {
-            if (MangerDataContex._dataContex._Teachers == null)
-                MangerDataContex._dataContex._Teachers = new List<Teacher>();
-            Teacher teacher = MangerDataContex._dataContex._Teachers.FirstOrDefault(t => t.TeacherId == id);
+            var data = _dataTeacher.LoadData();
+            if (data == null)
+                return false;
+            Teacher teacher = data.Where(t => t.TeacherId == id).FirstOrDefault();
             if (teacher == null)
             {
                 return false;
             }
-            MangerDataContex._dataContex._Teachers.Remove(teacher);
-            return true;
+            data.Remove(teacher);
+            return _dataTeacher.SaveData(data);
 
         }
         public bool AddItem(Teacher teacher)
         {
-            if (MangerDataContex._dataContex._Teachers == null)
-                MangerDataContex._dataContex._Teachers = new List<Teacher>();
-            teacher.TotalWeeklyHours = teacher.Subjects.Sum(cs => cs.HoursPerWeek);
-            teacher.TeacherId = MangerDataContex._dataContex._Teachers.Max(t => t.TeacherId) + 1;
-            MangerDataContex._dataContex._Teachers.Add(teacher);
-            return true;
+            var data = _dataTeacher.LoadData();
+            if (data == null)
+                return false;
+           teacher.TotalWeeklyHours = teacher.Subjects.Sum(cs => cs.HoursPerWeek);
+            teacher.TeacherId = data.Max(t => t.TeacherId) + 1;
+            data.Add(teacher);
+            return _dataTeacher.SaveData(data);
         }
+        
     }
 }

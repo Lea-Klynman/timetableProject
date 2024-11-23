@@ -1,4 +1,6 @@
 ﻿using timetableProject.Controllers;
+using timetableProject.DATA;
+using timetableProject.DTO;
 
 namespace timetableProject.Services
 {
