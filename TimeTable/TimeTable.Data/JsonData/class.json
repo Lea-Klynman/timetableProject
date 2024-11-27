@@ -1,0 +1,82 @@
+[
+    {
+        "ClassId": 1,
+        "Name": "Class A",
+        "ClassNumber": 5,
+        "TotalWeekHours": 25,
+        "Subjects": [
+            {
+                "ClassSubjectId": 1,
+                "SubjectId": 1,
+                "ClassId": 1,
+                "HoursPersWeek": 5
+            },
+            {
+                "ClassSubjectId": 2,
+                "SubjectId": 2,
+                "ClassId": 1,
+                "HoursPersWeek": 3
+            }
+        ]
+    },
+    {
+        "ClassId": 2,
+        "Name": "Class B",
+        "ClassNumber": 6,
+        "TotalWeekHours": 30,
+        "Subjects": [
+            {
+                "ClassSubjectId": 3,
+                "SubjectId": 3,
+                "ClassId": 2,
+                "HoursPersWeek": 4
+            },
+            {
+                "ClassSubjectId": 4,
+                "SubjectId": 4,
+                "ClassId": 2,
+                "HoursPersWeek": 2
+            }
+        ]
+    },
+    {
+        "ClassId": 3,
+        "Name": "Class C",
+        "ClassNumber": 7,
+        "TotalWeekHours": 28,
+        "Subjects": [
+            {
+                "ClassSubjectId": 5,
+                "SubjectId": 1,
+                "ClassId": 3,
+                "HoursPersWeek": 6
+            },
+            {
+                "ClassSubjectId": 6,
+                "SubjectId": 2,
+                "ClassId": 3,
+                "HoursPersWeek": 4
+            }
+        ]
+    },
+    {
+        "ClassId": 4,
+        "Name": "Class D",
+        "ClassNumber": 8,
+        "TotalWeekHours": 32,
+        "Subjects": [
+            {
+                "ClassSubjectId": 7,
+                "SubjectId": 3,
+                "ClassId": 4,
+                "HoursPersWeek": 5
+            },
+            {
+                "ClassSubjectId": 8,
+                "SubjectId": 4,
+                "ClassId": 4,
+                "HoursPersWeek": 3
+            }
+        ]
+    }
+]

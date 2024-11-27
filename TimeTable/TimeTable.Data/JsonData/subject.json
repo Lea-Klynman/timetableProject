@@ -1,0 +1,22 @@
+[
+    {
+        "SubjectId": 1,
+        "Name": "Mathematics",
+        "IsGroup": true
+    },
+    {
+        "SubjectId": 2,
+        "Name": "English",
+        "IsGroup": true
+    },
+    {
+        "SubjectId": 3,
+        "Name": "History",
+        "IsGroup": false
+    },
+    {
+        "SubjectId": 4,
+        "Name": "Biology",
+        "IsGroup": false
+    }
+]

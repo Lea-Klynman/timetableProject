@@ -1,0 +1,31 @@
+[
+    {
+        "AvailabilityId": 1,
+        "DayOfWeek": "Monday",
+        "Unavailablehours": "10:00-12:00",
+        "IsWholeDayOff": false,
+        "isMust": true
+    },
+    {
+        "AvailabilityId": 2,
+        "DayOfWeek": "Tuesday",
+        "Unavailablehours": "08:00-10:00",
+        "IsWholeDayOff": false,
+        "isMust": false
+    },
+    {
+        "AvailabilityId": 3,
+        "DayOfWeek": "Wednesday",
+        "Unavailablehours": "12:00-14:00",
+        "IsWholeDayOff": true,
+        "isMust": false
+    },
+    {
+        "AvailabilityId": 4,
+        "DayOfWeek": "Friday",
+        "Unavailablehours": "09:00-11:00",
+        "IsWholeDayOff": false,
+        "isMust": true
+    }
+]
+
