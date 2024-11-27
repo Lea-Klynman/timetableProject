@@ -17,7 +17,7 @@ namespace timetableProject.Services
                 return null;
             return data;
         }
-        public Teacher GetTeacherId(int id)
+        public Teacher? GetTeacherId(int id)
         {
             var data = _dataTeacher.LoadData();
             if (data == null)
