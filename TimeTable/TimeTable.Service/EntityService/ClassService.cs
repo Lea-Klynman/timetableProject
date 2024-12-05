@@ -9,7 +9,7 @@ using TimeTable.Core.IService;
 
 namespace TimeTable.Service.EntityService
 {
-    public class ClassService : IGenericService<ClassEntity>
+    public class ClassService : IClassService
     {
         readonly IGenericRepository<ClassEntity> _classRepository;
         public ClassService(IGenericRepository<ClassEntity> classRepository)
@@ -18,10 +18,7 @@ namespace TimeTable.Service.EntityService
         }
         public bool AddItem(ClassEntity value)
         {
-            var item = GetById(value.ClassId);
-            if (item != null) { return false; }
-            if(value.Subjects!=null)
-                value.TotalWeekHours=value.Subjects.Sum(s=>s.HoursPersWeek);
+            
             return _classRepository.AddData(value);
         }
 
@@ -42,12 +39,7 @@ namespace TimeTable.Service.EntityService
 
         public bool Update(int id, ClassEntity value)
         {
-            var item = GetById(id);
-            if (item == null) { return false; }
-            value.Name = value.Name ?? item.Name;
-            value.Subjects = value.Subjects ?? item.Subjects;
-            value.ClassNumber=value.ClassNumber!=0?value.ClassNumber:item.ClassNumber;
-            value.TotalWeekHours=value.Subjects.Sum(s=>s.HoursPersWeek);
+            
             return _classRepository.UpdateData(id, value);
         }
     }

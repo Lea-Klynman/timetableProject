@@ -19,8 +19,10 @@ namespace TimeTable.Data.Repository
         {
             try
             {
+                var item = GetByIdData(data.SubjectId);
+                if (item != null) { return false; }
                 _dataContext._Subjects.Add(data);
-                _dataContext.SaveChange();
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -32,7 +34,7 @@ namespace TimeTable.Data.Repository
 
         public IEnumerable<SubjectEntity> GetAllData()
         {
-            return _dataContext._Subjects;
+            return _dataContext._Subjects.ToList();
         }
 
         public SubjectEntity? GetByIdData(int id)
@@ -50,7 +52,7 @@ namespace TimeTable.Data.Repository
                     return false;
                 }
                 _dataContext._Subjects.Remove(item);
-                _dataContext.SaveChange();
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -65,10 +67,11 @@ namespace TimeTable.Data.Repository
             try
             {
                 var item = GetByIdData(id);
+                if (item == null) { return false; }
+                value.Name = value.Name ?? item.Name;
                 item.Name = value.Name;
                 item.IsGroup = value.IsGroup;
-                item.SubjectId = id;
-                _dataContext.SaveChange();
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)

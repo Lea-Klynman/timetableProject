@@ -10,8 +10,8 @@ namespace TimeTable.Api.Controllers
     [ApiController]
     public class AvailabilityController : ControllerBase
     {
-        readonly IGenericService<AvailabilityEntity> _availabilityService;
-        public AvailabilityController(IGenericService<AvailabilityEntity> availabilityService)
+        readonly IAvailabilityService _availabilityService;
+        public AvailabilityController(IAvailabilityService availabilityService)
         {
             _availabilityService = availabilityService;
         }

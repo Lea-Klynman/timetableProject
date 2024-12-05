@@ -9,7 +9,7 @@ using TimeTable.Core.IService;
 
 namespace TimeTable.Service.EntityService
 {
-    public class AvailabilityService : IGenericService<AvailabilityEntity>
+    public class AvailabilityService : IAvailabilityService
     {
         readonly IGenericRepository<AvailabilityEntity> _availabilityRepository;
         public AvailabilityService(IGenericRepository<AvailabilityEntity> availabilityRepository)
@@ -19,8 +19,7 @@ namespace TimeTable.Service.EntityService
 
         public bool AddItem(AvailabilityEntity value)
         {
-            var item = GetById(value.AvailabilityId);
-            if (item != null) { return false; }
+            
             return _availabilityRepository.AddData(value);
         }
 
@@ -41,10 +40,10 @@ namespace TimeTable.Service.EntityService
 
         public bool Update(int id, AvailabilityEntity value)
         {
-            var item = GetById(id);
-            if (item == null) { return false; }
-            value.DayOfWeek = value.DayOfWeek ?? item.DayOfWeek;
-            return _availabilityRepository.UpdateData(id, value);
+            
+            if (!_availabilityRepository.UpdateData(id, value))
+                return false;
+            return true;
         }
     }
 }

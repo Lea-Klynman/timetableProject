@@ -20,8 +20,10 @@ namespace TimeTable.Data.Repository
         {
             try
             {
+                var item = GetByIdData(data.AvailabilityId);
+                if (item != null) { return false; }
                 _dataContext._Availabilities.Add(data);
-                _dataContext.SaveChange();
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -33,7 +35,7 @@ namespace TimeTable.Data.Repository
 
         public IEnumerable<AvailabilityEntity> GetAllData()
         {
-            return _dataContext._Availabilities;
+            return _dataContext._Availabilities.ToList();
         }
 
         public AvailabilityEntity? GetByIdData(int id)
@@ -51,7 +53,7 @@ namespace TimeTable.Data.Repository
                     return false;
                 }
                 _dataContext._Availabilities.Remove(item);
-                _dataContext.SaveChange();
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -67,12 +69,13 @@ namespace TimeTable.Data.Repository
             try
             {
                 var item = GetByIdData(id);
+                if (item == null) { return false; }
+                value.DayOfWeek = value.DayOfWeek ?? item.DayOfWeek;
                 item.DayOfWeek = value.DayOfWeek;
                 item.IsWholeDayOff = value.IsWholeDayOff;
                 item.isMust=value.isMust;
-                item.Unavailablehours=value.Unavailablehours;
-                item.AvailabilityId = id;
-                _dataContext.SaveChange();
+                item.Unavailablehours = value.Unavailablehours;
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)

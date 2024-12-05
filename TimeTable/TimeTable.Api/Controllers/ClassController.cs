@@ -10,8 +10,8 @@ namespace TimeTable.Api.Controllers
     [ApiController]
     public class ClassController : ControllerBase
     {
-        readonly IGenericService<ClassEntity> _classService;
-        public ClassController(IGenericService<ClassEntity> classService)
+        readonly IClassService _classService;
+        public ClassController(IClassService classService)
         {
             _classService = classService;
         }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TimeTable.Core.Entity;
 using TimeTable.Core.IService;
-using TimeTable.Service;
+
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,8 +12,8 @@ namespace TimeTable.Api.Controllers
     [ApiController]
     public class TeacherController : ControllerBase
     {
-        readonly IGenericService<TeacherEntity> _teacherService;
-        public TeacherController(IGenericService<TeacherEntity> teacherService)
+        readonly ITeacherService _teacherService;
+        public TeacherController(ITeacherService teacherService)
         {
             _teacherService = teacherService;
         }
@@ -38,7 +38,7 @@ namespace TimeTable.Api.Controllers
         [HttpPost]
         public ActionResult<bool> Post([FromBody] TeacherEntity value)
         {
-            if (value == null || !value.Id.IdString() || !_teacherService.AddItem(value))
+            if (value == null || !_teacherService.AddItem(value))
             {
                 return BadRequest();
             }
@@ -49,7 +49,7 @@ namespace TimeTable.Api.Controllers
         [HttpPut("{id}")]
         public ActionResult<bool> Put(int id, [FromBody] TeacherEntity value)
         {
-            if (id < 0 || value == null || !value.Id.IdString()) { return BadRequest(); }
+            if (id < 0 || value == null) { return BadRequest(); }
             if (!_teacherService.Update(id, value)) return NotFound();
             return true;
         }

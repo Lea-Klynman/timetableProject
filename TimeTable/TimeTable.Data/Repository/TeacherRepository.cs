@@ -19,8 +19,12 @@ namespace TimeTable.Data.Repository
         {
             try
             {
+                var item = GetByIdData(data.TeacherId);
+                if (item != null) { return false; }
+                if(_dataContext._Teachers.Where(t=>t.Id==data.Id).Any()) {return false;}
+                data.TotalWeeklyHours = data.Subjects != null ? data.Subjects.Sum(cs => cs.HoursPerWeek) : 0;
                 _dataContext._Teachers.Add(data);
-                _dataContext.SaveChange();
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -32,7 +36,7 @@ namespace TimeTable.Data.Repository
 
         public IEnumerable<TeacherEntity> GetAllData()
         {
-            return _dataContext._Teachers;
+            return _dataContext._Teachers.ToList();
         }
 
         public TeacherEntity? GetByIdData(int id)
@@ -50,7 +54,7 @@ namespace TimeTable.Data.Repository
                     return false;
                 }
                 _dataContext._Teachers.Remove(item);
-                _dataContext.SaveChange();
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -65,13 +69,17 @@ namespace TimeTable.Data.Repository
             try
             {
                 var item = GetByIdData(id);
-                item.FirstName=value.FirstName;
-                item.LastName=value.LastName;
-                item.TotalWeeklyHours=value.TotalWeeklyHours;
-                item.TeacherId = id;
-                item.Subjects = value.Subjects;
-                item.Availabilities = value.Availabilities;
-                _dataContext.SaveChange();
+                if (item == null)
+                {
+                    return false;
+                }
+  
+                item.FirstName=value.FirstName ?? item.FirstName;
+                item.LastName=value.LastName ?? item.LastName;
+                item.Subjects = value.Subjects ?? item.Subjects;
+                item.TotalWeeklyHours = item.Subjects.Sum(cs => cs.HoursPerWeek);
+                item.Availabilities = value.Availabilities ?? item.Availabilities;
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)

@@ -9,7 +9,7 @@ using TimeTable.Core.IService;
 
 namespace TimeTable.Service.EntityService
 {
-    public class SubjectService : IGenericService<SubjectEntity>
+    public class SubjectService : ISubjectService
     {
         readonly IGenericRepository<SubjectEntity> _subjectRepository;
         public SubjectService(IGenericRepository<SubjectEntity> subjectRepository)
@@ -19,9 +19,10 @@ namespace TimeTable.Service.EntityService
 
         public bool AddItem(SubjectEntity value)
         {
-            var item = GetById(value.SubjectId);
-            if (item != null) {return false;}
-            return _subjectRepository.AddData(value);
+            
+            if(!_subjectRepository.AddData(value))
+                return false;
+            return true;
         }
 
         public SubjectEntity? GetById(int id)
@@ -41,10 +42,10 @@ namespace TimeTable.Service.EntityService
 
         public bool Update(int id, SubjectEntity value)
         {
-            var item = GetById(id);
-            if (item == null) {return false;}
-            value.Name=value.Name ?? item.Name;
-            return _subjectRepository.UpdateData(id,value);
+            
+            if(! _subjectRepository.UpdateData(id,value))
+                return false;
+            return true;
         }
     }
 }

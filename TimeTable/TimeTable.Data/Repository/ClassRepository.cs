@@ -19,8 +19,12 @@ namespace TimeTable.Data.Repository
         {
             try
             {
+                var item = GetByIdData(data.ClassId);
+                if (item != null) { return false; }
+                if (data.Subjects != null)
+                    data.TotalWeekHours = data.Subjects.Sum(s => s.HoursPersWeek);
                 _dataContext._Classes.Add(data);
-                _dataContext.SaveChange();
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -31,7 +35,7 @@ namespace TimeTable.Data.Repository
 
         public IEnumerable<ClassEntity> GetAllData()
         {
-            return _dataContext._Classes;
+            return _dataContext._Classes.ToList();
         }
 
         public ClassEntity? GetByIdData(int id)
@@ -49,7 +53,7 @@ namespace TimeTable.Data.Repository
                     return false;
                 }
                 _dataContext._Classes.Remove(item);
-                _dataContext.SaveChange();
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -64,12 +68,12 @@ namespace TimeTable.Data.Repository
             try
             {
                 var item = GetByIdData(id);
-                item.Name = value.Name;
-                item.Subjects = value.Subjects;
-                item.TotalWeekHours = value.TotalWeekHours;
-                item.ClassNumber = value.ClassNumber;
-                item.ClassId = id;
-                _dataContext.SaveChange();
+                if (item == null) { return false; }  
+                item.Name = value.Name ?? item.Name;
+                item.Subjects = value.Subjects ?? item.Subjects;
+                item.TotalWeekHours = item.Subjects.Sum(s => s.HoursPersWeek);
+                item.ClassNumber = value.ClassNumber != 0 ? value.ClassNumber : item.ClassNumber;
+                _dataContext.SaveChanges();
                 return true;
             }
             catch (Exception)

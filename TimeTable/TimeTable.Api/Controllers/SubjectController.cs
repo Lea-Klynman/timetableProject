@@ -10,8 +10,8 @@ namespace TimeTable.Api.Controllers
     [ApiController]
     public class SubjectController : ControllerBase
     {
-        readonly IGenericService<SubjectEntity> _subjectService;
-        public SubjectController(IGenericService<SubjectEntity> subjectService)
+        readonly ISubjectService _subjectService;
+        public SubjectController(ISubjectService subjectService)
         {
             _subjectService = subjectService; 
         }
