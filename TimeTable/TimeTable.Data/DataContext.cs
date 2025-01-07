@@ -10,6 +10,8 @@ namespace TimeTable.Data
         public DbSet<ClassEntity> _Classes { get; set; }
         public DbSet<SubjectEntity> _Subjects { get; set; }
         public DbSet<TeacherEntity> _Teachers { get; set; }
+        public DbSet<TeacherClassSubjectEntity> _TeacherClassSubject{ get ;set; }
+        public DbSet<ClassSubjectEntity> _ClassSubject { get; set; }
         public DataContext(DbContextOptions<DataContext> options):base(options) { }
         
 

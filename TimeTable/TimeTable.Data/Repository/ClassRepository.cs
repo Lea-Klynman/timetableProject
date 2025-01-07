@@ -11,6 +11,7 @@ namespace TimeTable.Data.Repository
     public class ClassRepository : IGenericRepository<ClassEntity>
     {
         readonly DataContext _dataContext;
+        readonly ClassSubjectRepository _subjectRepository;
         public ClassRepository(DataContext dataContext)
         {
             _dataContext= dataContext;
@@ -23,6 +24,11 @@ namespace TimeTable.Data.Repository
                 if (item != null) { return false; }
                 if (data.Subjects != null)
                     data.TotalWeekHours = data.Subjects.Sum(s => s.HoursPersWeek);
+                if(data.Subjects != null)
+                foreach (var item1 in data.Subjects)
+                {
+                    _subjectRepository.AddData(item1);
+                }
                 _dataContext._Classes.Add(data);
                 _dataContext.SaveChanges();
                 return true;
@@ -52,6 +58,13 @@ namespace TimeTable.Data.Repository
                 {
                     return false;
                 }
+                if (item.Subjects != null)
+                {
+                    foreach (var item1 in item.Subjects)
+                    {
+                        _subjectRepository.RemoveItemFromData(item1.ClassSubjectId);
+                    }
+                }
                 _dataContext._Classes.Remove(item);
                 _dataContext.SaveChanges();
                 return true;
@@ -73,6 +86,13 @@ namespace TimeTable.Data.Repository
                 item.Subjects = value.Subjects ?? item.Subjects;
                 item.TotalWeekHours = item.Subjects.Sum(s => s.HoursPersWeek);
                 item.ClassNumber = value.ClassNumber != 0 ? value.ClassNumber : item.ClassNumber;
+                if(item.Subjects != null)
+                {
+                    foreach (var item2 in item.Subjects)
+                    {
+                        _subjectRepository.UpdateData(item2.ClassSubjectId, item2);
+                    }
+                }
                 _dataContext.SaveChanges();
                 return true;
             }

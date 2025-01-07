@@ -8,14 +8,19 @@ using System.Threading.Tasks;
 
 namespace TimeTable.Core.Entity
 {
+    [Table("ClassSubject")]
     public class ClassSubjectEntity
     {
         [Key]
         public int ClassSubjectId { get; set; }
-        [ForeignKey("Subject")]
+        
         public int SubjectId { get; set; }
-        [ForeignKey("Class")]
+        [ForeignKey(nameof(SubjectId))]
+        public SubjectEntity Subject { get; set; }
+        
         public int ClassId { get; set; }
+        [ForeignKey(nameof(ClassId))]
+        public ClassEntity Class { get; set; }
         public int HoursPersWeek { get; set; }
 
 

@@ -11,6 +11,8 @@ namespace TimeTable.Data.Repository
     public class TeacherRepository : IGenericRepository<TeacherEntity>
     {
         readonly DataContext _dataContext;
+        readonly AvailabilityRepository _availabilityRepository;
+        readonly TeacherClassSubjectRepository _classSubjectRepository;
         public TeacherRepository(DataContext dataContext)
         {
            _dataContext= dataContext;
@@ -23,7 +25,17 @@ namespace TimeTable.Data.Repository
                 if (item != null) { return false; }
                 if(_dataContext._Teachers.Where(t=>t.Id==data.Id).Any()) {return false;}
                 data.TotalWeeklyHours = data.Subjects != null ? data.Subjects.Sum(cs => cs.HoursPerWeek) : 0;
+                foreach (var item1 in data.Availabilities)
+                {
+                    _availabilityRepository.AddData(item1);
+                }
+                if(data.Subjects!=null)
+                foreach (var item1 in data.Subjects)
+                {
+                    _classSubjectRepository.AddData(item1);
+                }
                 _dataContext._Teachers.Add(data);
+
                 _dataContext.SaveChanges();
                 return true;
             }
@@ -53,6 +65,16 @@ namespace TimeTable.Data.Repository
                 {
                     return false;
                 }
+                foreach (var item1 in item.Availabilities)
+                {
+                    _availabilityRepository.RemoveItemFromData(item1.AvailabilityId);
+                }
+                if (item.Subjects != null)
+                    foreach (var item1 in item.Subjects)
+                    {
+                        _classSubjectRepository.RemoveItemFromData(item1.TeacherClassSubjectId);
+                    }
+                _dataContext.SaveChanges();
                 _dataContext._Teachers.Remove(item);
                 _dataContext.SaveChanges();
                 return true;
@@ -79,6 +101,15 @@ namespace TimeTable.Data.Repository
                 item.Subjects = value.Subjects ?? item.Subjects;
                 item.TotalWeeklyHours = item.Subjects.Sum(cs => cs.HoursPerWeek);
                 item.Availabilities = value.Availabilities ?? item.Availabilities;
+                foreach (var item1 in item.Availabilities)
+                {
+                    _availabilityRepository.UpdateData(item1.AvailabilityId,item1);
+                }
+                if (item.Subjects != null)
+                    foreach (var item1 in item.Subjects)
+                    {
+                        _classSubjectRepository.UpdateData(item1.TeacherClassSubjectId, item1);
+                    }
                 _dataContext.SaveChanges();
                 return true;
             }
