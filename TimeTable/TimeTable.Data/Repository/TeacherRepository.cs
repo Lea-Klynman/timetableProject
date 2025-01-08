@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TimeTable.Core.Entity;
 using TimeTable.Core.IRepository;
 
@@ -48,7 +49,7 @@ namespace TimeTable.Data.Repository
 
         public IEnumerable<TeacherEntity> GetAllData()
         {
-            return _dataContext._Teachers.ToList();
+            return _dataContext._Teachers.Include(u=>u.Subjects ).Include(u=>u.Availabilities).ToList();
         }
 
         public TeacherEntity? GetByIdData(int id)
