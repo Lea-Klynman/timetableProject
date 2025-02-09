@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using TimeTable.Api.PostModels;
+using TimeTable.Core.Dtos;
 using TimeTable.Core.Entity;
 using TimeTable.Core.IService;
 
@@ -11,40 +14,42 @@ namespace TimeTable.Api.Controllers
     public class SubjectController : ControllerBase
     {
         readonly ISubjectService _subjectService;
-        public SubjectController(ISubjectService subjectService)
+        private readonly IMapper _mapper;
+        public SubjectController(ISubjectService subjectService,IMapper mapper)
         {
-            _subjectService = subjectService; 
+            _subjectService = subjectService;
+            _mapper = mapper;
         }
 
         // GET: api/<SubjectController>
         [HttpGet]
-        public ActionResult< IEnumerable<SubjectEntity>> Get()
+        public ActionResult< IEnumerable<SubjectDto>> Get()
         {
             return Ok(_subjectService.GetList());
         }
 
         // GET api/<SubjectController>/5
         [HttpGet("{id}")]
-        public ActionResult< SubjectEntity>GetById(int id)
+        public ActionResult< SubjectDto>GetById(int id)
         {
             if(id < 0) { return BadRequest(); }
-            return _subjectService.GetById(id);
+            return _mapper.Map<SubjectDto>(_subjectService.GetById(id));
         }
 
         // POST api/<SubjectController>
         [HttpPost]
-        public ActionResult<bool> Post([FromBody] SubjectEntity value)
+        public ActionResult<SubjectDto> Post([FromBody] SubjectPostModel value)
         {
-            if(value == null || !_subjectService.AddItem(value)) { return BadRequest(); }
-            return true;
+            if(value == null || !_subjectService.AddItem(_mapper.Map<SubjectEntity>(value))) { return BadRequest(); }
+            return _mapper.Map <SubjectDto>(value);
         }
 
         // PUT api/<SubjectController>/5
         [HttpPut("{id}")]
-        public ActionResult<bool> Put(int id, [FromBody] SubjectEntity value)
+        public ActionResult<bool> Put(int id, [FromBody] SubjectPostModel value)
         {
             if(id < 0 || value==null) {return BadRequest(); }
-            if(!_subjectService.Update(id, value)) { return NotFound(); };
+            if(!_subjectService.Update(id, _mapper.Map<SubjectEntity>(value))) { return NotFound(); };
             return true;
         }
 

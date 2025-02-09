@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using TimeTable.Api.PostModels;
+using TimeTable.Core.Dtos;
 using TimeTable.Core.Entity;
 using TimeTable.Core.IService;
 
@@ -11,39 +14,41 @@ namespace TimeTable.Api.Controllers
     public class AvailabilityController : ControllerBase
     {
         readonly IAvailabilityService _availabilityService;
-        public AvailabilityController(IAvailabilityService availabilityService)
+        private readonly IMapper _mapper;
+        public AvailabilityController(IAvailabilityService availabilityService,IMapper mapper)
         {
             _availabilityService = availabilityService;
+            _mapper = mapper;
         }
         // GET: api/<AvailabilityController>
         [HttpGet]
-        public ActionResult<IEnumerable<AvailabilityEntity>> Get()
+        public ActionResult<IEnumerable<AvailabilityDto>> Get()
         {
             return Ok(_availabilityService.GetList());
         }
 
         // GET api/<AvailabilityController>/5
         [HttpGet("{id}")]
-        public ActionResult<AvailabilityEntity> GetById(int id)
+        public ActionResult<AvailabilityDto> GetById(int id)
         {
             if (id < 0) return BadRequest();
-            return _availabilityService.GetById(id);
+            return _mapper.Map<AvailabilityDto>(_availabilityService.GetById(id));
         }
 
         // POST api/<AvailabilityController>
         [HttpPost]
-        public ActionResult<bool> Post([FromBody] AvailabilityEntity value)
+        public ActionResult<AvailabilityDto> Post([FromBody] AvailabilityPostModel value)
         {
-            if (value == null || !_availabilityService.AddItem(value)) return BadRequest();
-            return true;
+            if (value == null || !_availabilityService.AddItem(_mapper.Map<AvailabilityEntity>(value))) return BadRequest();
+            return _mapper.Map<AvailabilityDto>(value);
         }
 
         // PUT api/<AvailabilityController>/5
         [HttpPut("{id}")]
-        public ActionResult<bool> Put(int id, [FromBody] AvailabilityEntity value)
+        public ActionResult<bool> Put(int id, [FromBody] AvailabilityPostModel value)
         {
             if (id < 0 || value == null) return BadRequest();
-            if (!_availabilityService.Update(id, value)) return NotFound();
+            if (!_availabilityService.Update(id, _mapper.Map<AvailabilityEntity>(value))) return NotFound();
             return true;
         }
 

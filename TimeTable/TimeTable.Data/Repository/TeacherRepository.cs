@@ -9,7 +9,7 @@ using TimeTable.Core.IRepository;
 
 namespace TimeTable.Data.Repository
 {
-    public class TeacherRepository : IGenericRepository<TeacherEntity>
+    public class TeacherRepository : ITeacherRepository
     {
         readonly DataContext _dataContext;
         readonly AvailabilityRepository _availabilityRepository;

@@ -13,7 +13,11 @@ namespace TimeTable.Data
         public DbSet<TeacherClassSubjectEntity> _TeacherClassSubject{ get ;set; }
         public DbSet<ClassSubjectEntity> _ClassSubject { get; set; }
         public DataContext(DbContextOptions<DataContext> options):base(options) { }
-        
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(m => Console.WriteLine(m));
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }

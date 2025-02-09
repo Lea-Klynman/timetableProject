@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using TimeTable.Api.PostModels;
+using TimeTable.Core.Dtos;
 using TimeTable.Core.Entity;
 using TimeTable.Core.IService;
 
@@ -13,44 +16,46 @@ namespace TimeTable.Api.Controllers
     public class TeacherController : ControllerBase
     {
         readonly ITeacherService _teacherService;
-        public TeacherController(ITeacherService teacherService)
+        private readonly IMapper _mapper;
+        public TeacherController(ITeacherService teacherService,IMapper mapper)
         {
             _teacherService = teacherService;
+            _mapper = mapper;
         }
         // GET: api/<TeacherController>
         [HttpGet]
-        public ActionResult<IEnumerable<TeacherEntity>> Get()
+        public ActionResult<IEnumerable<TeacherDto>> Get()
         {
             return Ok(_teacherService.GetList());
         }
 
         // GET api/<TeacherController>/5
         [HttpGet("{id}")]
-        public ActionResult<TeacherEntity> GetById(int id)
+        public ActionResult<TeacherDto> GetById(int id)
         {
             if (id < 0) { return BadRequest(); }
             var item = _teacherService.GetById(id);
             if (item == null) { return NotFound(); }
-            return item;
+            return _mapper.Map<TeacherDto>( item);
         }
 
         // POST api/<TeacherController>
         [HttpPost]
-        public ActionResult<bool> Post([FromBody] TeacherEntity value)
+        public ActionResult<TeacherDto> Post([FromBody] TeacherPostModel value)
         {
-            if (value == null || !_teacherService.AddItem(value))
+            if (value == null || !_teacherService.AddItem(_mapper.Map<TeacherEntity>( value)))
             {
                 return BadRequest();
             }
-            return true;
+            return _mapper.Map<TeacherDto>(value);
         }
 
         // PUT api/<TeacherController>/5
         [HttpPut("{id}")]
-        public ActionResult<bool> Put(int id, [FromBody] TeacherEntity value)
+        public ActionResult<bool> Put(int id, [FromBody] TeacherPostModel value)
         {
             if (id < 0 || value == null) { return BadRequest(); }
-            if (!_teacherService.Update(id, value)) return NotFound();
+            if (!_teacherService.Update(id,_mapper.Map<TeacherEntity>( value))) return NotFound();
             return true;
         }
 

@@ -8,7 +8,7 @@ using TimeTable.Core.IRepository;
 
 namespace TimeTable.Data.Repository
 {
-    public class SubjectRepository:IGenericRepository<SubjectEntity>
+    public class SubjectRepository: ISubjectRepository
     {
         readonly DataContext _dataContext;
         public SubjectRepository(DataContext dataContext) {

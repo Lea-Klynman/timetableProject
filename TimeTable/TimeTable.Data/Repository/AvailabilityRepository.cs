@@ -8,7 +8,7 @@ using TimeTable.Core.IRepository;
 
 namespace TimeTable.Data.Repository
 {
-    public class AvailabilityRepository : IGenericRepository<AvailabilityEntity>
+    public class AvailabilityRepository : IAvailabilityRepository
     {
         readonly DataContext _dataContext;
         public AvailabilityRepository(DataContext dataContext)

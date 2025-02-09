@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using TimeTable.Api.PostModels;
+using TimeTable.Core.Dtos;
 using TimeTable.Core.Entity;
 using TimeTable.Core.IService;
 
@@ -11,39 +14,41 @@ namespace TimeTable.Api.Controllers
     public class ClassController : ControllerBase
     {
         readonly IClassService _classService;
-        public ClassController(IClassService classService)
+        private readonly IMapper _mapper;
+        public ClassController(IClassService classService,IMapper mapper)
         {
             _classService = classService;
+            _mapper = mapper;
         }
         // GET: api/<ClassController>
         [HttpGet]
-        public ActionResult<IEnumerable<ClassEntity>> Get()
+        public ActionResult<IEnumerable<ClassDto>> Get()
         {
             return Ok(_classService.GetList());
         }
 
         // GET api/<ClassController>/5
         [HttpGet("{id}")]
-        public ActionResult<ClassEntity> GetById(int id)
+        public ActionResult<ClassDto> GetById(int id)
         {
             if (id < 0) { return BadRequest(); }
-            return _classService.GetById(id);
+            return _mapper.Map<ClassDto>(_classService.GetById(id));
         }
 
         // POST api/<ClassController>
         [HttpPost]
-        public ActionResult<bool> Post([FromBody] ClassEntity value)
+        public ActionResult<ClassDto> Post([FromBody] ClassPostModel value)
         {
-            if (value == null || !_classService.AddItem(value)) { return BadRequest(); }
-            return true;
+            if (value == null || !_classService.AddItem(_mapper.Map<ClassEntity>(value))) { return BadRequest(); }
+            return _mapper.Map<ClassDto>(value);
         }
 
         // PUT api/<ClassController>/5
         [HttpPut("{id}")]
-        public ActionResult<bool> Put(int id, [FromBody] ClassEntity value)
+        public ActionResult<bool> Put(int id, [FromBody] ClassPostModel value)
         {
             if(id < 0 || value==null ) {return BadRequest(); }
-            if(!_classService.Update(id,value)) return NotFound();
+            if(!_classService.Update(id, _mapper.Map<ClassEntity>(value))) return NotFound();
             return true;
         }
 
