@@ -13,6 +13,6 @@ namespace TimeTable.Core.IRepository
         T? GetByIdData(int id);
         bool UpdateData(int id, T value);
         bool RemoveItemFromData(int id);
-        bool AddData(T data);
+        T AddData(T data);
     }
 }

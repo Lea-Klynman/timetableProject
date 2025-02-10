@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using TimeTable.Core.Dtos;
 using TimeTable.Core.Entity;
 using TimeTable.Core.IRepository;
 using TimeTable.Core.IService;
@@ -12,24 +14,26 @@ namespace TimeTable.Service.EntityService
     public class ClassService : IClassService
     {
         readonly IGenericRepository<ClassEntity> _classRepository;
-        public ClassService(IGenericRepository<ClassEntity> classRepository)
+        private readonly IMapper _mapper;
+        public ClassService(IGenericRepository<ClassEntity> classRepository,IMapper mapper)
         {
             _classRepository = classRepository;
+            _mapper = mapper;
         }
-        public bool AddItem(ClassEntity value)
+        public ClassDto AddItem(ClassDto value)
         {
-            
-            return _classRepository.AddData(value);
-        }
-
-        public ClassEntity? GetById(int id)
-        {
-            return _classRepository.GetByIdData(id);
+            var res= _classRepository.AddData( _mapper.Map<ClassEntity>( value));
+            return _mapper.Map<ClassDto>(res);
         }
 
-        public IEnumerable<ClassEntity> GetList()
+        public ClassDto? GetById(int id)
+        {          
+            return _mapper.Map<ClassDto>( _classRepository.GetByIdData(id));
+        }
+
+        public IEnumerable<ClassDto> GetList()
         {
-            return _classRepository.GetAllData();
+            return (IEnumerable<ClassDto>)_mapper.Map<ClassDto>( _classRepository.GetAllData());
         }
 
         public bool RemoveItem(int id)
@@ -37,10 +41,10 @@ namespace TimeTable.Service.EntityService
             return _classRepository.RemoveItemFromData(id);
         }
 
-        public bool Update(int id, ClassEntity value)
+        public bool Update(int id, ClassDto value)
         {
             
-            return _classRepository.UpdateData(id, value);
+            return _classRepository.UpdateData(id,_mapper.Map<ClassEntity>( value));
         }
     }
 }

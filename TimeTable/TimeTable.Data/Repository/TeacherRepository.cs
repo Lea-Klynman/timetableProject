@@ -18,13 +18,13 @@ namespace TimeTable.Data.Repository
         {
            _dataContext= dataContext;
         }
-        public bool AddData(TeacherEntity data)
+        public TeacherEntity AddData(TeacherEntity data)
         {
             try
             {
                 var item = GetByIdData(data.TeacherId);
-                if (item != null) { return false; }
-                if(_dataContext._Teachers.Where(t=>t.Id==data.Id).Any()) {return false;}
+                if (item != null) { return null; }
+                if(_dataContext._Teachers.Where(t=>t.Id==data.Id).Any()) {return null;}
                 data.TotalWeeklyHours = data.Subjects != null ? data.Subjects.Sum(cs => cs.HoursPerWeek) : 0;
                 foreach (var item1 in data.Availabilities)
                 {
@@ -38,12 +38,12 @@ namespace TimeTable.Data.Repository
                 _dataContext._Teachers.Add(data);
 
                 _dataContext.SaveChanges();
-                return true;
+                return data;
             }
             catch (Exception)
             {
 
-                return false;
+                return null;
             }
         }
 

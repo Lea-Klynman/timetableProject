@@ -21,10 +21,10 @@ namespace TimeTable.Service.EntityService
             _mapper = mapper;
         }
 
-        public bool AddItem(AvailabilityDto value)
+        public AvailabilityDto AddItem(AvailabilityDto value)
         {
-            
-            return _availabilityRepository.AddData(_mapper.Map<AvailabilityDto>(value));
+            var res = _availabilityRepository.AddData(_mapper.Map<AvailabilityEntity>(value));
+            return _mapper.Map<AvailabilityDto>(res);
         }
 
         public AvailabilityDto? GetById(int id)
@@ -32,9 +32,9 @@ namespace TimeTable.Service.EntityService
             return _mapper.Map<AvailabilityDto>(_availabilityRepository.GetByIdData(id));
         }
 
-        public IEnumerable<AvailabilityEntity> GetList()
+        public IEnumerable<AvailabilityDto> GetList()
         {
-            return _availabilityRepository.GetAllData();
+            return (IEnumerable<AvailabilityDto>)_mapper.Map<AvailabilityDto>(_availabilityRepository.GetAllData());
         }
 
         public bool RemoveItem(int id)
@@ -42,10 +42,10 @@ namespace TimeTable.Service.EntityService
             return _availabilityRepository.RemoveItemFromData(id);
         }
 
-        public bool Update(int id, AvailabilityEntity value)
+        public bool Update(int id, AvailabilityDto value)
         {
             
-            if (!_availabilityRepository.UpdateData(id, value))
+            if (!_availabilityRepository.UpdateData(id,_mapper.Map<AvailabilityEntity>( value)))
                 return false;
             return true;
         }

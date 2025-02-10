@@ -17,12 +17,12 @@ namespace TimeTable.Data.Repository
         {
             _dataContext= dataContext;
         }
-        public bool AddData(ClassEntity data)
+        public ClassEntity AddData(ClassEntity data)
         {
             try
             {
                 var item = GetByIdData(data.ClassId);
-                if (item != null) { return false; }
+                if (item != null) { return null; }
                 if (data.Subjects != null)
                     data.TotalWeekHours = data.Subjects.Sum(s => s.HoursPersWeek);
                 if(data.Subjects != null)
@@ -32,11 +32,11 @@ namespace TimeTable.Data.Repository
                 }
                 _dataContext._Classes.Add(data);
                 _dataContext.SaveChanges();
-                return true;
+                return data;
             }
             catch (Exception)
             {
-                return false;
+                return null;
             }
         }
 

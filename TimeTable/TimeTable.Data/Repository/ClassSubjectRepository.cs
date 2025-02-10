@@ -15,18 +15,18 @@ namespace TimeTable.Data.Repository
         {
             _dataContext = dataContext;
         }
-        public bool AddData(ClassSubjectEntity data)
+        public ClassSubjectEntity AddData(ClassSubjectEntity data)
         {
             try
             {
                 var item = GetByIdData(data.ClassSubjectId);
-                if (item != null) { return false; }
+                if (item != null) { return null; }
                 _dataContext._ClassSubject.Add(data);
                 _dataContext.SaveChanges();
-                return true;
+                return data;
             }
             catch (Exception ex) { 
-                return false;
+                return null;
             }
         }
 

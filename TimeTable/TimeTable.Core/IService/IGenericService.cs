@@ -12,7 +12,7 @@ namespace TimeTable.Core.IService
         T? GetById(int id);
         bool Update(int id,T value);
         bool RemoveItem(int id);
-        bool AddItem(T value);
+        T AddItem(T value);
 
     }
 }

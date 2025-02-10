@@ -40,8 +40,10 @@ namespace TimeTable.Api.Controllers
         [HttpPost]
         public ActionResult<SubjectDto> Post([FromBody] SubjectPostModel value)
         {
-            if(value == null || !_subjectService.AddItem(_mapper.Map<SubjectEntity>(value))) { return BadRequest(); }
-            return _mapper.Map <SubjectDto>(value);
+            if(value == null ) { return BadRequest(); }
+            var res = _subjectService.AddItem(_mapper.Map<SubjectDto>(value));
+            if(res == null) return BadRequest();
+            return res;
         }
 
         // PUT api/<SubjectController>/5
@@ -49,7 +51,7 @@ namespace TimeTable.Api.Controllers
         public ActionResult<bool> Put(int id, [FromBody] SubjectPostModel value)
         {
             if(id < 0 || value==null) {return BadRequest(); }
-            if(!_subjectService.Update(id, _mapper.Map<SubjectEntity>(value))) { return NotFound(); };
+            if(!_subjectService.Update(id, _mapper.Map<SubjectDto>(value))) { return NotFound(); };
             return true;
         }
 

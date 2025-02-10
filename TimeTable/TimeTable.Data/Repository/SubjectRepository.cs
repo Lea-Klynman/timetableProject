@@ -15,20 +15,20 @@ namespace TimeTable.Data.Repository
             _dataContext= dataContext;
         }
 
-        public bool AddData(SubjectEntity data)
+        public SubjectEntity AddData(SubjectEntity data)
         {
             try
             {
                 var item = GetByIdData(data.SubjectId);
-                if (item != null) { return false; }
+                if (item != null) { return null; }
                 _dataContext._Subjects.Add(data);
                 _dataContext.SaveChanges();
-                return true;
+                return data;
             }
             catch (Exception)
             {
 
-                return false;
+                return null;
             }
         }
 

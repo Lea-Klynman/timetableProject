@@ -32,15 +32,25 @@ namespace TimeTable.Api.Controllers
         public ActionResult<AvailabilityDto> GetById(int id)
         {
             if (id < 0) return BadRequest();
-            return _mapper.Map<AvailabilityDto>(_availabilityService.GetById(id));
+            var res= _mapper.Map<AvailabilityDto>(_availabilityService.GetById(id));
+            if (res == null)
+            {
+                NotFound();
+            }
+            return res;
         }
 
         // POST api/<AvailabilityController>
         [HttpPost]
         public ActionResult<AvailabilityDto> Post([FromBody] AvailabilityPostModel value)
         {
-            if (value == null || !_availabilityService.AddItem(_mapper.Map<AvailabilityEntity>(value))) return BadRequest();
-            return _mapper.Map<AvailabilityDto>(value);
+            if (value == null ) return BadRequest();
+            var res = _availabilityService.AddItem(_mapper.Map<AvailabilityDto>(value));
+            if (res == null)
+            {
+                BadRequest();
+            }
+            return _mapper.Map<AvailabilityDto>(res);
         }
 
         // PUT api/<AvailabilityController>/5
@@ -48,7 +58,7 @@ namespace TimeTable.Api.Controllers
         public ActionResult<bool> Put(int id, [FromBody] AvailabilityPostModel value)
         {
             if (id < 0 || value == null) return BadRequest();
-            if (!_availabilityService.Update(id, _mapper.Map<AvailabilityEntity>(value))) return NotFound();
+            if (!_availabilityService.Update(id, _mapper.Map<AvailabilityDto>(value))) return NotFound();
             return true;
         }
 

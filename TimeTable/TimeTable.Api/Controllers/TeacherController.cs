@@ -43,11 +43,13 @@ namespace TimeTable.Api.Controllers
         [HttpPost]
         public ActionResult<TeacherDto> Post([FromBody] TeacherPostModel value)
         {
-            if (value == null || !_teacherService.AddItem(_mapper.Map<TeacherEntity>( value)))
+            if (value == null )
             {
                 return BadRequest();
             }
-            return _mapper.Map<TeacherDto>(value);
+            var res = _teacherService.AddItem(_mapper.Map<TeacherDto>(value));
+            if(res==null) return NotFound();
+            return res;
         }
 
         // PUT api/<TeacherController>/5
@@ -55,7 +57,7 @@ namespace TimeTable.Api.Controllers
         public ActionResult<bool> Put(int id, [FromBody] TeacherPostModel value)
         {
             if (id < 0 || value == null) { return BadRequest(); }
-            if (!_teacherService.Update(id,_mapper.Map<TeacherEntity>( value))) return NotFound();
+            if (!_teacherService.Update(id,_mapper.Map<TeacherDto>( value))) return NotFound();
             return true;
         }
 

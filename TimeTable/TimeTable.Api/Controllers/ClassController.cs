@@ -32,15 +32,22 @@ namespace TimeTable.Api.Controllers
         public ActionResult<ClassDto> GetById(int id)
         {
             if (id < 0) { return BadRequest(); }
-            return _mapper.Map<ClassDto>(_classService.GetById(id));
+            var res=_mapper.Map<ClassDto>(_classService.GetById(id));
+            if(res == null) { return NotFound(); }
+            return Ok(res);
         }
 
         // POST api/<ClassController>
         [HttpPost]
         public ActionResult<ClassDto> Post([FromBody] ClassPostModel value)
         {
-            if (value == null || !_classService.AddItem(_mapper.Map<ClassEntity>(value))) { return BadRequest(); }
-            return _mapper.Map<ClassDto>(value);
+            if (value == null ) { return BadRequest(); }
+            var res = _classService.AddItem(_mapper.Map<ClassDto>(value));
+            if (res == null)
+            {
+               return BadRequest();
+            }
+            return res;
         }
 
         // PUT api/<ClassController>/5
@@ -48,7 +55,7 @@ namespace TimeTable.Api.Controllers
         public ActionResult<bool> Put(int id, [FromBody] ClassPostModel value)
         {
             if(id < 0 || value==null ) {return BadRequest(); }
-            if(!_classService.Update(id, _mapper.Map<ClassEntity>(value))) return NotFound();
+            if(!_classService.Update(id, _mapper.Map<ClassDto>(value))) return NotFound();
             return true;
         }
 

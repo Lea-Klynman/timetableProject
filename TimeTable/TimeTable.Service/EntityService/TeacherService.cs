@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using TimeTable.Core.Dtos;
 using TimeTable.Core.Entity;
 using TimeTable.Core.IRepository;
 using TimeTable.Core.IService;
@@ -13,22 +15,26 @@ namespace TimeTable.Service.EntityService
     public class TeacherService :ITeacherService
     {
         readonly IGenericRepository<TeacherEntity> _teacherRepository;
-        public TeacherService(IGenericRepository<TeacherEntity> teacherRepository)
+        private readonly IMapper _mapper;
+
+        public TeacherService(IGenericRepository<TeacherEntity> teacherRepository , IMapper mapper)
         {
             _teacherRepository = teacherRepository;
+            _mapper = mapper;
         }
-        public IEnumerable<TeacherEntity> GetList()
+        public IEnumerable<TeacherDto> GetList()
         {
-            return _teacherRepository.GetAllData();
+            return (IEnumerable<TeacherDto>)_mapper.Map<TeacherDto>( _teacherRepository.GetAllData());
         }
-        public TeacherEntity? GetById(int id)
+        public TeacherDto? GetById(int id)
         {
-            return _teacherRepository.GetByIdData(id);
+            return _mapper.Map<TeacherDto>( _teacherRepository.GetByIdData(id));
         }
-        public bool AddItem(TeacherEntity value)
+        public TeacherDto AddItem(TeacherDto value)
         {
-            if (!value.Id.IdString()) { return false; }
-            return _teacherRepository.AddData(value);
+            if (!value.Id.IdString()) { return null; }
+            var res= _teacherRepository.AddData( _mapper.Map<TeacherEntity>( value));
+            return _mapper.Map<TeacherDto>(res);
         }
 
         public bool RemoveItem(int id)
@@ -36,9 +42,9 @@ namespace TimeTable.Service.EntityService
             return _teacherRepository.RemoveItemFromData(id);
         }
 
-        public bool Update(int id, TeacherEntity value)
+        public bool Update(int id, TeacherDto value)
         {      
-            return _teacherRepository.UpdateData(id, value);
+            return _teacherRepository.UpdateData(id, _mapper.Map<TeacherEntity>( value));
         }
     }
 
